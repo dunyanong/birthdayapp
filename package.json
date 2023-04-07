@@ -7,10 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db": "prisma studio --experimental",
-    "db-save": "prisma migrate save --experimental",
-    "db-up": "prisma migrate up --experimental",
-    "generate": "prisma generate"
+    "generate": "npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.12.0",
@@ -20,7 +17,6 @@
     "react-icons": "^4.8.0"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.1.1",
     "@types/node": "^18.15.11",
     "@types/react": "18.0.33",
     "autoprefixer": "^10.4.14",
