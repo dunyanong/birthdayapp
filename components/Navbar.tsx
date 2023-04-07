@@ -8,18 +8,18 @@ const Navbar = () => {
 
         <div className="hover:cursor">
             <Link href="/" legacyBehavior>
-                <a className="font-medium text-2xl text-white tracking-tighter transition-colors duration-200 hover:text-yellow-400">BD Reminder</a>
+                <a className="font-medium text-2xl text-white tracking-tighter transition-colors duration-200 hover:text-green-600">BD Reminder</a>
             </Link>
         </div>
 
         <div className="flex gap-4 justify-center items-center">
             <div className="text-sm md:text-base font-semibold">
                 <Link href="/" legacyBehavior>
-                <a className="text-white transition-colors duration-200 hover:text-yellow-400">Home</a>
+                <a className="text-white transition-colors duration-200 hover:text-green-600">Home</a>
                 </Link>
             </div>
             <div className="text-sm md:text-base font-semibold">
-                <a href="https://github.com/dunyanong/Next-13-Movie-App" target="_blank" rel="noopener noreferrer" className="text-white flex items-center transition-colors duration-200 hover:text-yellow-400">
+                <a href="https://github.com/dunyanong/birthdayapp" target="_blank" rel="noopener noreferrer" className="text-white flex items-center transition-colors duration-200 hover:text-green-600">
                 <FaGithub className="mr-2" />
                 GitHub
                 </a>
