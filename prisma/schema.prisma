@@ -12,8 +12,8 @@ datasource db {
 
 model Note {
   id        Int      @id @default(autoincrement())
-  name     String
-  date   String
+  name      String
+  date      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
