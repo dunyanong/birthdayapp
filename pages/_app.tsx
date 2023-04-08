@@ -5,11 +5,11 @@ import type { AppProps } from 'next/app'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className='flex flex-col min-h-screen bg-black text-white'>
+    <div className='flex flex-col min-h-screen bg-white text-black'>
       <div className='flex justify-center'>
         <Navbar />
       </div>
-      <main className='flex-grow'>
+      <main className='flex-grow '>
         <Component {...pageProps} />
       </main>
       <footer className='mt-auto'>

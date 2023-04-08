@@ -1,16 +1,12 @@
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { prisma } from '../lib/prisma'
-import { AiOutlinePlusCircle, AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
+import { AiOutlinePlusCircle, AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { PrismaClient } from '@prisma/client'
 
-interface Notes{
-  notes: {
-    id: string
-    name: string
-    date: string
-  }[]
-}
+const prisma = new PrismaClient()
 
 interface FormData {
   name: string
@@ -18,7 +14,7 @@ interface FormData {
   id: string
 }
 
-const Home = ({notes}: Notes) => {
+const Home = ({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [form, setForm] = useState<FormData>({name: '', date: '', id: ''})
   const router = useRouter()
 
@@ -45,6 +41,7 @@ const Home = ({notes}: Notes) => {
   
         setForm({ name: '', date: '', id: '' });
         refreshData();
+        toast.success('Birthday recorded');
       } else {
         console.error(`Failed to create note: ${response.statusText}`);
       }
@@ -52,7 +49,6 @@ const Home = ({notes}: Notes) => {
       console.error(`Failed to create note: ${error}`);
     }
   }  
-
 
   async function deleteNote(id: string) {
     try {
@@ -63,6 +59,7 @@ const Home = ({notes}: Notes) => {
        method: 'DELETE'
      }).then(() => {
        refreshData()
+       toast.success('Updated info');
      })
     } catch (error) {
      console.log(error); 
@@ -70,6 +67,11 @@ const Home = ({notes}: Notes) => {
   }
 
   const handleSubmit = async (data: FormData) => {
+    if (!data.name || !data.date) {
+      toast.error('Please fill all the fields');
+      return;
+    }
+
     try {
      create(data) 
     } catch (error) {
@@ -78,12 +80,19 @@ const Home = ({notes}: Notes) => {
   }
 
   return (
-    <div className="pt-20">
-      <h1 className="text-center font-bold text-2xl py-10">Birthday Reminder 🎉</h1>
+    <div className="pt-20 bg-white">
+      <ToastContainer />
+      <div className='flex justify-center'>
+        <h1 className="py-10 text-3xl font-bold tracking-tight text-black md:text-5xl">Birthday List 🎉</h1>
+      </div>      
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit(form);
+          if (form.name.trim() === "" || form.date.trim() === "") {
+            toast.error("Please fill in all fields.");
+          } else {
+            handleSubmit(form);
+          }
         }}
         className="w-auto min-w-[25%] max-w-min mx-auto space-y-6 flex flex-col items-stretch"
       >
@@ -92,13 +101,13 @@ const Home = ({notes}: Notes) => {
           placeholder="Name"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="border-2 rounded border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-green-400 text-gray-800 bg-gray-100 hover:bg-gray-200 transition-colors duration-300"
+          className="border-2 rounded border-gray-300 p-2 focus:outline-none text-black bg-white"
         />
-        <textarea
+        <input
           placeholder="Date"
           value={form.date}
           onChange={(e) => setForm({ ...form, date: e.target.value })}
-          className="border-2 rounded border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-green-400 text-gray-800 bg-gray-100 hover:bg-gray-200 transition-colors duration-300"
+          className="border-2 rounded border-gray-300 p-2 focus:outline-none text-black bg-white"
         />
         <button
           type="submit"
@@ -107,28 +116,28 @@ const Home = ({notes}: Notes) => {
           <span>
             <AiOutlinePlusCircle />
           </span>
-          <span>Add Note</span>
+          <span>Add Birthday</span>
         </button>
       </form>
-      <div className="w-auto min-w-[25%] max-w-min mt-20 mx-auto space-y-6 flex flex-col items-stretch">
+      <div className="w-auto min-w-[25%] max-w-min my-10 mx-auto space-y-6 flex flex-col items-stretch">
         <ul>
-          {notes.map((note) => (
-            <li key={note.id} className="border-b border-gray-300 p-2 hover:scale-110 transition-all duration-300 transform-origin-center">
+          {notes.map((note: any) => (
+            <li key={note.id} className="p-2 hover:scale-110 transition-all duration-300 transform-origin-center bg-white">
               <div className="flex justify-between">
                 <div className="flex-1">
-                  <h3 className="font-bold text-white">{note.name}</h3>
-                  <p className="text-sm text-gray-200">{note.date}</p>
+                  <h3 className="w-full text-lg font-medium text-gray-900 md:text-xl">{note.name} 🎂</h3>
+                  <p className="text-sm text-gray-500 w-32 mb-4 text-left md:mb-0">{note.date}</p>
                 </div>
                 <div className="flex items-center space-x-4">
                   <button
                     onClick={() => setForm({ name: note.name, date: note.date, id: note.id })}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-3 rounded font-bold focus:outline-none focus:ring-2 focus:ring-green-400"
+                    className="hover:bg-yellow-500 text-black py-2 px-3 rounded font-bold focus:outline-none focus:ring-2 focus:ring-green-400"
                   >
                     <AiOutlineEdit className="text-base" />
                   </button>
                   <button
                     onClick={() => deleteNote(note.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-3 rounded font-bold focus:outline-none focus:ring-2 focus:ring-green-400"
+                    className="hover:bg-red-500 text-black py-2 px-3 rounded font-bold focus:outline-none focus:ring-2 focus:ring-green-400"
                   >
                     <AiOutlineDelete className="text-base" />
                   </button>
@@ -139,7 +148,7 @@ const Home = ({notes}: Notes) => {
         </ul>
       </div>
     </div>
-  );
+  );  
 }
 
 export default Home
