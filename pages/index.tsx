@@ -25,7 +25,7 @@ const Home = ({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   async function create(data: FormData) {
     try {
-      const response = await fetch(`http://localhost:${port}/api/create`, {
+      const response = await fetch(`/api/create`, {
         body: JSON.stringify(data),
         headers: {
           'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ const Home = ({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   async function deleteNote(id: string) {
     try {
-     fetch(`http://localhost:${port}/api/note/${id}`, {
+     fetch(`/api/note/${id}`, {
        headers: {
          "date-Type": "application/json",
        },
