@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { AiOutlinePlusCircle, AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
+const port = process.env.PORT || 3001;
 
 const prisma = new PrismaClient()
 
@@ -24,7 +25,7 @@ const Home = ({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   async function create(data: FormData) {
     try {
-      const response = await fetch('http://localhost:3000/api/create', {
+      const response = await fetch(`http://localhost:${port}/api/create`, {
         body: JSON.stringify(data),
         headers: {
           'Content-Type': 'application/json'
@@ -42,6 +43,7 @@ const Home = ({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) =
         setForm({ name: '', date: '', id: '' });
         refreshData();
         toast.success('Birthday recorded');
+        return responseData;
       } else {
         console.error(`Failed to create note: ${response.statusText}`);
       }
@@ -52,7 +54,7 @@ const Home = ({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) =
 
   async function deleteNote(id: string) {
     try {
-     fetch(`http://localhost:3000/api/note/${id}`, {
+     fetch(`http://localhost:${port}/api/note/${id}`, {
        headers: {
          "date-Type": "application/json",
        },
