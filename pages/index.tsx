@@ -5,7 +5,7 @@ import { AiOutlinePlusCircle, AiOutlineEdit, AiOutlineDelete } from 'react-icons
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PrismaClient } from '@prisma/client';
-const port = process.env.PORT || 3001;
+import Head from 'next/head';
 
 const prisma = new PrismaClient()
 
@@ -82,7 +82,11 @@ const Home = ({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) =
   }
 
   return (
-    <div className="pt-20 bg-white">
+    <div>
+      <Head>
+        <title>Birthday List 🎉</title>
+      </Head>
+    <main className="pt-20 bg-white">
       <ToastContainer />
       <div className='flex justify-center'>
         <h1 className="py-10 text-3xl font-bold tracking-tight text-black md:text-5xl">Birthday List 🎉</h1>
@@ -149,6 +153,7 @@ const Home = ({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) =
           ))}
         </ul>
       </div>
+    </main>
     </div>
   );  
 }
